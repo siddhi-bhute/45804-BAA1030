@@ -3146,95 +3146,32 @@ vertical-align: -.125em;
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>Polio, once one of the world’s most feared diseases, is now closer than ever to being eradicated, but the journey isn’t over yet. Vaccination remains our most powerful tool to protect children and communities, ensuring that no life is left vulnerable to this preventable illness.</p>
-<p>In this project, we explore real-world data sourced from <strong>UNICEF</strong> to examine how countries and regions around the world are performing in their efforts to immunize against polio. By analyzing trends, comparing regions, and investigating the relationship between life expectancy and vaccination rates, we aim to highlight where significant progress has been made and where greater efforts are still needed.</p>
-<p>Using Python libraries such as <strong>pandas</strong>, <strong>seaborn</strong>, and <strong>matplotlib</strong>, we extract insights and create clear visualizations that tell the story behind the numbers. Through scatterplots, bar charts, maps, and tables, we uncover important patterns in global vaccination efforts from the top-performing countries to regions that continue to face challenges.</p>
+<p>In this project, we explore real-world data sourced from UNICEF to examine how countries and regions around the world are performing in their efforts to immunize against polio. By analyzing trends, comparing regions, and investigating the relationship between life expectancy and vaccination rates, we aim to highlight where significant progress has been made and where greater efforts are still needed.</p>
+<p>Using Python libraries such as pandas, seaborn, and matplotlib, we extract insights and create clear visualizations that tell the story behind the numbers. Through scatterplots, bar charts, maps, and tables, we uncover important patterns in global vaccination efforts from the top-performing countries to regions that continue to face challenges.</p>
 <p>Beyond statistics and visualizations, this report provides an analytical overview of global polio vaccination efforts, highlighting performance variations across regions and examining the relationship between immunization rates and broader health indicators.</p>
-<div id="cell-3" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779804584,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:29352,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="1b07ad92-3b6b-4728-c522-5b7805dda3e0" data-execution_count="1">
+<div id="cell-4" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745789503071,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:2701,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="1f57fb8a-9343-4128-b565-fc02f199076f" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Install required libraries for visualizations</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install plotnine</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install geopandas</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Download countries data for creating world map</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget https:<span class="op">//</span>naturalearth.s3.amazonaws.com<span class="op">/</span><span class="dv">110</span><span class="er">m_cultural</span><span class="op">/</span>ne_110m_admin_0_countries.<span class="bu">zip</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>unzip ne_110m_admin_0_countries.<span class="bu">zip</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Requirement already satisfied: plotnine in /usr/local/lib/python3.11/dist-packages (0.14.5)
-Requirement already satisfied: matplotlib&gt;=3.8.0 in /usr/local/lib/python3.11/dist-packages (from plotnine) (3.10.0)
-Requirement already satisfied: pandas&gt;=2.2.0 in /usr/local/lib/python3.11/dist-packages (from plotnine) (2.2.2)
-Requirement already satisfied: mizani~=0.13.0 in /usr/local/lib/python3.11/dist-packages (from plotnine) (0.13.3)
-Requirement already satisfied: numpy&gt;=1.23.5 in /usr/local/lib/python3.11/dist-packages (from plotnine) (2.0.2)
-Requirement already satisfied: scipy&gt;=1.8.0 in /usr/local/lib/python3.11/dist-packages (from plotnine) (1.14.1)
-Requirement already satisfied: statsmodels&gt;=0.14.0 in /usr/local/lib/python3.11/dist-packages (from plotnine) (0.14.4)
-Requirement already satisfied: contourpy&gt;=1.0.1 in /usr/local/lib/python3.11/dist-packages (from matplotlib&gt;=3.8.0-&gt;plotnine) (1.3.2)
-Requirement already satisfied: cycler&gt;=0.10 in /usr/local/lib/python3.11/dist-packages (from matplotlib&gt;=3.8.0-&gt;plotnine) (0.12.1)
-Requirement already satisfied: fonttools&gt;=4.22.0 in /usr/local/lib/python3.11/dist-packages (from matplotlib&gt;=3.8.0-&gt;plotnine) (4.57.0)
-Requirement already satisfied: kiwisolver&gt;=1.3.1 in /usr/local/lib/python3.11/dist-packages (from matplotlib&gt;=3.8.0-&gt;plotnine) (1.4.8)
-Requirement already satisfied: packaging&gt;=20.0 in /usr/local/lib/python3.11/dist-packages (from matplotlib&gt;=3.8.0-&gt;plotnine) (24.2)
-Requirement already satisfied: pillow&gt;=8 in /usr/local/lib/python3.11/dist-packages (from matplotlib&gt;=3.8.0-&gt;plotnine) (11.1.0)
-Requirement already satisfied: pyparsing&gt;=2.3.1 in /usr/local/lib/python3.11/dist-packages (from matplotlib&gt;=3.8.0-&gt;plotnine) (3.2.3)
-Requirement already satisfied: python-dateutil&gt;=2.7 in /usr/local/lib/python3.11/dist-packages (from matplotlib&gt;=3.8.0-&gt;plotnine) (2.8.2)
-Requirement already satisfied: pytz&gt;=2020.1 in /usr/local/lib/python3.11/dist-packages (from pandas&gt;=2.2.0-&gt;plotnine) (2025.2)
-Requirement already satisfied: tzdata&gt;=2022.7 in /usr/local/lib/python3.11/dist-packages (from pandas&gt;=2.2.0-&gt;plotnine) (2025.2)
-Requirement already satisfied: patsy&gt;=0.5.6 in /usr/local/lib/python3.11/dist-packages (from statsmodels&gt;=0.14.0-&gt;plotnine) (1.0.1)
-Requirement already satisfied: six&gt;=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil&gt;=2.7-&gt;matplotlib&gt;=3.8.0-&gt;plotnine) (1.17.0)
-Requirement already satisfied: geopandas in /usr/local/lib/python3.11/dist-packages (1.0.1)
-Requirement already satisfied: numpy&gt;=1.22 in /usr/local/lib/python3.11/dist-packages (from geopandas) (2.0.2)
-Requirement already satisfied: pyogrio&gt;=0.7.2 in /usr/local/lib/python3.11/dist-packages (from geopandas) (0.10.0)
-Requirement already satisfied: packaging in /usr/local/lib/python3.11/dist-packages (from geopandas) (24.2)
-Requirement already satisfied: pandas&gt;=1.4.0 in /usr/local/lib/python3.11/dist-packages (from geopandas) (2.2.2)
-Requirement already satisfied: pyproj&gt;=3.3.0 in /usr/local/lib/python3.11/dist-packages (from geopandas) (3.7.1)
-Requirement already satisfied: shapely&gt;=2.0.0 in /usr/local/lib/python3.11/dist-packages (from geopandas) (2.1.0)
-Requirement already satisfied: python-dateutil&gt;=2.8.2 in /usr/local/lib/python3.11/dist-packages (from pandas&gt;=1.4.0-&gt;geopandas) (2.8.2)
-Requirement already satisfied: pytz&gt;=2020.1 in /usr/local/lib/python3.11/dist-packages (from pandas&gt;=1.4.0-&gt;geopandas) (2025.2)
-Requirement already satisfied: tzdata&gt;=2022.7 in /usr/local/lib/python3.11/dist-packages (from pandas&gt;=1.4.0-&gt;geopandas) (2025.2)
-Requirement already satisfied: certifi in /usr/local/lib/python3.11/dist-packages (from pyogrio&gt;=0.7.2-&gt;geopandas) (2025.1.31)
-Requirement already satisfied: six&gt;=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil&gt;=2.8.2-&gt;pandas&gt;=1.4.0-&gt;geopandas) (1.17.0)
---2025-04-27 18:50:03--  https://naturalearth.s3.amazonaws.com/110m_cultural/ne_110m_admin_0_countries.zip
-Resolving naturalearth.s3.amazonaws.com (naturalearth.s3.amazonaws.com)... 3.5.85.66, 52.218.232.251, 52.218.238.35, ...
-Connecting to naturalearth.s3.amazonaws.com (naturalearth.s3.amazonaws.com)|3.5.85.66|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 214976 (210K) [application/zip]
-Saving to: ‘ne_110m_admin_0_countries.zip’
-
-ne_110m_admin_0_cou 100%[===================&gt;] 209.94K  --.-KB/s    in 0.1s    
-
-2025-04-27 18:50:03 (1.48 MB/s) - ‘ne_110m_admin_0_countries.zip’ saved [214976/214976]
-
-Archive:  ne_110m_admin_0_countries.zip
-  inflating: ne_110m_admin_0_countries.README.html  
- extracting: ne_110m_admin_0_countries.VERSION.txt  
- extracting: ne_110m_admin_0_countries.cpg  
-  inflating: ne_110m_admin_0_countries.dbf  
-  inflating: ne_110m_admin_0_countries.prj  
-  inflating: ne_110m_admin_0_countries.shp  
-  inflating: ne_110m_admin_0_countries.shx  </code></pre>
-</div>
-</div>
-<div id="cell-4" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779829926,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:8905,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="63bed971-3b1f-4021-ef54-a048fd416ee6" data-execution_count="2">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Import required packages</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.colors <span class="im">as</span> mcolors</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> colorsys</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> colors</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ipywidgets <span class="im">as</span> widgets</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> linregress</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> posixpath <span class="im">import</span> join</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Libraries successfully imported&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Import required packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.colors <span class="im">as</span> mcolors</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> colorsys</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> colors</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ipywidgets <span class="im">as</span> widgets</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> linregress</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> posixpath <span class="im">import</span> join</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Libraries successfully imported&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Libraries successfully imported</code></pre>
@@ -3245,30 +3182,30 @@ Archive:  ne_110m_admin_0_countries.zip
 <h1>Dataset</h1>
 <p>We have used 3 datasets collected from UNICEF which contains polio 3<sup>rd</sup> dose vaccination indicator for children between 12 to 23 months old, a metadata file that contains information about countries such as, population, GDP, GNI, average life expectancy, etc., and UNICEF country-region information file that shows which country belongs to which region.</p>
 <p>The datasets were uploaded to Google Drive and used for data analytics and visualization purpose.</p>
-<div id="cell-6" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779880870,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:42502,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="0bdfe4f3-970f-4b20-9108-c76dada31f6c" data-execution_count="3">
+<div id="cell-6" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745789662912,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:7327,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="80af67ce-8951-48f3-8244-e2b0fda3c29b" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#connecting to google drive to read input files</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">&#39;/content/drive&#39;</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>os.chdir(<span class="st">&quot;/content/drive/My Drive/BAA1030&quot;</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Connected to Google Drive&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#connecting to google drive to read input files</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">&#39;/content/drive&#39;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>os.chdir(<span class="st">&quot;/content/drive/My Drive/BAA1030&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Connected to Google Drive&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mounted at /content/drive
 Connected to Google Drive</code></pre>
 </div>
 </div>
-<div id="cell-7" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779923901,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:373,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="d54c387e-1948-4180-b72c-a650e5653110" data-execution_count="7">
+<div id="cell-7" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745789673320,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:1230,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="a1ca5579-c6d4-439d-bc09-6cc83649ba1d" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load the data into dataframes</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>country_region_df <span class="op">=</span> pd.read_csv(<span class="st">&#39;unicef_country_region_lookup.csv&#39;</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>indicator_df <span class="op">=</span> pd.read_csv(<span class="st">&#39;unicef_indicator_2.csv&#39;</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>metadata_df <span class="op">=</span> pd.read_csv(<span class="st">&#39;unicef_metadata.csv&#39;</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Dataframes successfully loaded&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load the data into dataframes</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>country_region_df <span class="op">=</span> pd.read_csv(<span class="st">&#39;unicef_country_region_lookup.csv&#39;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>indicator_df <span class="op">=</span> pd.read_csv(<span class="st">&#39;unicef_indicator_2.csv&#39;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>metadata_df <span class="op">=</span> pd.read_csv(<span class="st">&#39;unicef_metadata.csv&#39;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Dataframes successfully loaded&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Dataframes successfully loaded</code></pre>
@@ -3297,52 +3234,52 @@ This streamlines the datasets and avoids unnecessary noise during further proces
 <p>Dropped any rows containing missing or blank values in both datasets.<br>
 This ensures that further analysis is performed on complete and reliable data.</p>
 <p>After completing these EDA steps, the datasets are now cleaner, more consistent, and ready for visualization.</p>
-<div id="cell-9" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779931367,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:171,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="ee0292de-07e7-4fb5-ad5b-4a1620abf0b7" data-execution_count="8">
+<div id="cell-9" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745789705684,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:124,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="2622fb6d-66df-4172-ad98-8b6932e201f8" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA step1: dropping unnecessary columns</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>indicator_df <span class="op">=</span> indicator_df.drop(columns<span class="op">=</span>[<span class="st">&#39;time_period_activity_related_to_when_the_data_are_collected&#39;</span>,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&#39;unit_of_measure&#39;</span>, <span class="st">&#39;unit_multiplier&#39;</span>, <span class="st">&#39;observation_status&#39;</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&#39;alpha_2_code&#39;</span>, <span class="st">&#39;observation_confidentaility&#39;</span>])</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>metadata_df <span class="op">=</span> metadata_df.drop(columns<span class="op">=</span>[<span class="st">&#39;inflation_consumer_prices_annual_percentage&#39;</span>,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&#39;military_expenditure_percentage_of_gdp&#39;</span>,</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&#39;fossil_fuel_energy_consumption_percentage_of_total&#39;</span>,</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&#39;alpha_2_code&#39;</span>])</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Columns that are not required successfully dropped&quot;</span>)</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA step2: Convert the columns into appropriate datatypes</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;time_period&#39;</span>] <span class="op">=</span> pd.to_datetime(indicator_df[<span class="st">&#39;time_period&#39;</span>], <span class="bu">format</span><span class="op">=</span><span class="st">&#39;%Y&#39;</span>).dt.strftime(<span class="st">&#39;%Y&#39;</span>)</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;country&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;country&#39;</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;numeric_code&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;numeric_code&#39;</span>].astype(<span class="bu">int</span>)</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;alpha_3_code&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;alpha_3_code&#39;</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;indicator&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;indicator&#39;</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;sex&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;sex&#39;</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;current_age&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;current_age&#39;</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>metadata_df[<span class="st">&#39;year&#39;</span>] <span class="op">=</span> pd.to_datetime(metadata_df[<span class="st">&#39;year&#39;</span>], <span class="bu">format</span><span class="op">=</span><span class="st">&#39;%Y&#39;</span>).dt.strftime(<span class="st">&#39;%Y&#39;</span>)</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>metadata_df[<span class="st">&#39;country&#39;</span>] <span class="op">=</span> metadata_df[<span class="st">&#39;country&#39;</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>metadata_df[<span class="st">&#39;alpha_3_code&#39;</span>] <span class="op">=</span> metadata_df[<span class="st">&#39;alpha_3_code&#39;</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>country_region_df[<span class="st">&#39;alpha_3_code&#39;</span>]<span class="op">=</span> country_region_df[<span class="st">&#39;alpha_3_code&#39;</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>country_region_df[<span class="st">&#39;country&#39;</span>] <span class="op">=</span> country_region_df[<span class="st">&#39;country&#39;</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>country_region_df[<span class="st">&#39;region&#39;</span>] <span class="op">=</span> country_region_df[<span class="st">&#39;region&#39;</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Columns successfully converted to appropriate datatypes&quot;</span>)</span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="co"># EDA step3: Remove the data before 1980 from metadata as we have data from 1980 onwards in the indicator file</span></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>metadata_df <span class="op">=</span> metadata_df.loc[metadata_df[<span class="st">&#39;year&#39;</span>] <span class="op">&gt;=</span> <span class="st">&#39;1980&#39;</span>]</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Data before 1980 successfully removed from metadata&quot;</span>)</span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA step4: Filter out rows with any blank or null values</span></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>indicator_df <span class="op">=</span> indicator_df.dropna()</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>metadata_df <span class="op">=</span> metadata_df.dropna()</span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Rows with any blank or null values successfully removed&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA step1: dropping unnecessary columns</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>indicator_df <span class="op">=</span> indicator_df.drop(columns<span class="op">=</span>[<span class="st">&#39;time_period_activity_related_to_when_the_data_are_collected&#39;</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&#39;unit_of_measure&#39;</span>, <span class="st">&#39;unit_multiplier&#39;</span>, <span class="st">&#39;observation_status&#39;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&#39;alpha_2_code&#39;</span>, <span class="st">&#39;observation_confidentaility&#39;</span>])</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>metadata_df <span class="op">=</span> metadata_df.drop(columns<span class="op">=</span>[<span class="st">&#39;inflation_consumer_prices_annual_percentage&#39;</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&#39;military_expenditure_percentage_of_gdp&#39;</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&#39;fossil_fuel_energy_consumption_percentage_of_total&#39;</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&#39;alpha_2_code&#39;</span>])</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Columns that are not required successfully dropped&quot;</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA step2: Convert the columns into appropriate datatypes</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;time_period&#39;</span>] <span class="op">=</span> pd.to_datetime(indicator_df[<span class="st">&#39;time_period&#39;</span>], <span class="bu">format</span><span class="op">=</span><span class="st">&#39;%Y&#39;</span>).dt.strftime(<span class="st">&#39;%Y&#39;</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;country&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;country&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;numeric_code&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;numeric_code&#39;</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;alpha_3_code&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;alpha_3_code&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;indicator&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;indicator&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;sex&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;sex&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>indicator_df[<span class="st">&#39;current_age&#39;</span>] <span class="op">=</span> indicator_df[<span class="st">&#39;current_age&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>metadata_df[<span class="st">&#39;year&#39;</span>] <span class="op">=</span> pd.to_datetime(metadata_df[<span class="st">&#39;year&#39;</span>], <span class="bu">format</span><span class="op">=</span><span class="st">&#39;%Y&#39;</span>).dt.strftime(<span class="st">&#39;%Y&#39;</span>)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>metadata_df[<span class="st">&#39;country&#39;</span>] <span class="op">=</span> metadata_df[<span class="st">&#39;country&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>metadata_df[<span class="st">&#39;alpha_3_code&#39;</span>] <span class="op">=</span> metadata_df[<span class="st">&#39;alpha_3_code&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>country_region_df[<span class="st">&#39;alpha_3_code&#39;</span>]<span class="op">=</span> country_region_df[<span class="st">&#39;alpha_3_code&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>country_region_df[<span class="st">&#39;country&#39;</span>] <span class="op">=</span> country_region_df[<span class="st">&#39;country&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>country_region_df[<span class="st">&#39;region&#39;</span>] <span class="op">=</span> country_region_df[<span class="st">&#39;region&#39;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Columns successfully converted to appropriate datatypes&quot;</span>)</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co"># EDA step3: Remove the data before 1980 from metadata as we have data from 1980 onwards in the indicator file</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>metadata_df <span class="op">=</span> metadata_df.loc[metadata_df[<span class="st">&#39;year&#39;</span>] <span class="op">&gt;=</span> <span class="st">&#39;1980&#39;</span>]</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Data before 1980 successfully removed from metadata&quot;</span>)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA step4: Filter out rows with any blank or null values</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>indicator_df <span class="op">=</span> indicator_df.dropna()</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>metadata_df <span class="op">=</span> metadata_df.dropna()</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Rows with any blank or null values successfully removed&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Columns that are not required successfully dropped
@@ -3351,37 +3288,37 @@ Data before 1980 successfully removed from metadata
 Rows with any blank or null values successfully removed</code></pre>
 </div>
 </div>
-<div id="cell-10" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779940278,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:41,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-execution_count="9">
+<div id="cell-10" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745789712210,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:54,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Join all 3 dataframes to create a single one for our vizualization</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>merged_df <span class="op">=</span> pd.merge(indicator_df, metadata_df, left_on<span class="op">=</span>[<span class="st">&#39;alpha_3_code&#39;</span>, <span class="st">&#39;time_period&#39;</span>], right_on<span class="op">=</span>[<span class="st">&#39;alpha_3_code&#39;</span>, <span class="st">&#39;year&#39;</span>], how<span class="op">=</span><span class="st">&#39;inner&#39;</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>joined_df <span class="op">=</span> pd.merge(merged_df, country_region_df, left_on<span class="op">=</span>[<span class="st">&#39;alpha_3_code&#39;</span>,<span class="st">&#39;country_x&#39;</span>], right_on<span class="op">=</span>[<span class="st">&#39;alpha_3_code&#39;</span>,<span class="st">&#39;country&#39;</span>], how<span class="op">=</span><span class="st">&#39;inner&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Join all 3 dataframes to create a single one for our vizualization</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>merged_df <span class="op">=</span> pd.merge(indicator_df, metadata_df, left_on<span class="op">=</span>[<span class="st">&#39;alpha_3_code&#39;</span>, <span class="st">&#39;time_period&#39;</span>], right_on<span class="op">=</span>[<span class="st">&#39;alpha_3_code&#39;</span>, <span class="st">&#39;year&#39;</span>], how<span class="op">=</span><span class="st">&#39;inner&#39;</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>joined_df <span class="op">=</span> pd.merge(merged_df, country_region_df, left_on<span class="op">=</span>[<span class="st">&#39;alpha_3_code&#39;</span>,<span class="st">&#39;country_x&#39;</span>], right_on<span class="op">=</span>[<span class="st">&#39;alpha_3_code&#39;</span>,<span class="st">&#39;country&#39;</span>], how<span class="op">=</span><span class="st">&#39;inner&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 </section>
 <section id="visualization-1-world-map" class="level1">
 <h1>Visualization #1: World Map</h1>
-<div id="cell-12" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779950022,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:5590,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="5ed8ca18-24b9-41df-a200-96a3c80cdfd1" data-execution_count="10">
+<div id="cell-12" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745789719738,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:4333,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="17576dbb-991c-44ec-c7d6-e1f3031e242f" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Loading worldmap data downloaded earlier</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>world <span class="op">=</span> gpd.read_file(<span class="st">&quot;ne_110m_admin_0_countries.shp&quot;</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>world <span class="op">=</span> world.merge(joined_df, left_on<span class="op">=</span><span class="st">&#39;ADM0_A3&#39;</span>, right_on<span class="op">=</span><span class="st">&#39;alpha_3_code&#39;</span>, how<span class="op">=</span><span class="st">&#39;left&#39;</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#creating world map</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    ggplot(world, aes(fill<span class="op">=</span><span class="st">&#39;obs_value&#39;</span>, geometry<span class="op">=</span><span class="st">&#39;geometry&#39;</span>))</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_map()</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> scale_fill_gradient(low<span class="op">=</span><span class="st">&quot;teal&quot;</span>, high<span class="op">=</span><span class="st">&quot;pink&quot;</span>)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> labs(fill<span class="op">=</span><span class="st">&quot;Avg. Vaccination&quot;</span>)</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> ggtitle(<span class="st">&quot;Average Vaccination by Country through 1980-2023&quot;</span>)</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Loading worldmap data downloaded earlier</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>world <span class="op">=</span> gpd.read_file(<span class="st">&quot;ne_110m_admin_0_countries.shp&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>world <span class="op">=</span> world.merge(joined_df, left_on<span class="op">=</span><span class="st">&#39;ADM0_A3&#39;</span>, right_on<span class="op">=</span><span class="st">&#39;alpha_3_code&#39;</span>, how<span class="op">=</span><span class="st">&#39;left&#39;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#creating world map</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    ggplot(world, aes(fill<span class="op">=</span><span class="st">&#39;obs_value&#39;</span>, geometry<span class="op">=</span><span class="st">&#39;geometry&#39;</span>))</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_map()</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> scale_fill_gradient(low<span class="op">=</span><span class="st">&quot;teal&quot;</span>, high<span class="op">=</span><span class="st">&quot;pink&quot;</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> labs(fill<span class="op">=</span><span class="st">&quot;Avg. Vaccination&quot;</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> ggtitle(<span class="st">&quot;Average Vaccination by Country through 1980-2023&quot;</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -3397,50 +3334,50 @@ The global map paints a vivid picture of humanity’s long struggle and success 
 </section>
 <section id="visualization-2-time-series-line-chart" class="level1">
 <h1>Visualization #2: Time-series Line Chart</h1>
-<div id="cell-15" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779956724,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:691,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="3d01f2b4-2f00-481a-aecb-23aebdd4f533" data-execution_count="11">
+<div id="cell-15" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745789727088,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:420,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="9145a2e5-72dd-4971-c547-a9f29bf247eb" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating time-series chart</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>time_series_df <span class="op">=</span> (</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    indicator_df.groupby(<span class="st">&quot;time_period&quot;</span>, as_index<span class="op">=</span><span class="va">False</span>)[<span class="st">&quot;obs_value&quot;</span>].mean()</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate min, max, and mean of average obs_value</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>min_row <span class="op">=</span> time_series_df.loc[time_series_df[<span class="st">&quot;obs_value&quot;</span>].idxmin()]</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>max_row <span class="op">=</span> time_series_df.loc[time_series_df[<span class="st">&quot;obs_value&quot;</span>].idxmax()]</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>mean_value <span class="op">=</span> time_series_df[<span class="st">&quot;obs_value&quot;</span>].mean()</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.lineplot(data<span class="op">=</span>time_series_df, x<span class="op">=</span><span class="st">&quot;time_period&quot;</span>, y<span class="op">=</span><span class="st">&quot;obs_value&quot;</span>, marker<span class="op">=</span><span class="st">&quot;o&quot;</span>)</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Average Polio Vaccination Over Time&quot;</span>, fontsize<span class="op">=</span><span class="dv">20</span>, pad<span class="op">=</span><span class="dv">30</span>)</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Year&quot;</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Vaccination Rate (%)&quot;</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">90</span>)</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co">#Adding annotations for min, max, and mean obs_value in the visualization</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>ax.text(</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    min_row[<span class="st">&quot;time_period&quot;</span>], min_row[<span class="st">&quot;obs_value&quot;</span>],</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f&quot;Min: </span><span class="sc">{</span>min_row[<span class="st">&#39;obs_value&#39;</span>]<span class="sc">:.1f}</span><span class="ss">&quot;</span>,</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    ha<span class="op">=</span><span class="st">&quot;center&quot;</span>, va<span class="op">=</span><span class="st">&quot;top&quot;</span>, color<span class="op">=</span><span class="st">&quot;red&quot;</span>, fontsize<span class="op">=</span><span class="dv">12</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>ax.text(</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    max_row[<span class="st">&quot;time_period&quot;</span>], max_row[<span class="st">&quot;obs_value&quot;</span>] <span class="op">+</span> <span class="dv">2</span>,</span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f&quot;Max: </span><span class="sc">{</span>max_row[<span class="st">&#39;obs_value&#39;</span>]<span class="sc">:.1f}</span><span class="ss">&quot;</span>,</span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    ha<span class="op">=</span><span class="st">&quot;center&quot;</span>, va<span class="op">=</span><span class="st">&quot;bottom&quot;</span>, color<span class="op">=</span><span class="st">&quot;green&quot;</span>, fontsize<span class="op">=</span><span class="dv">12</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>plt.axhline(mean_value, color<span class="op">=</span><span class="st">&quot;blue&quot;</span>, linestyle<span class="op">=</span><span class="st">&quot;--&quot;</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>ax.text(</span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>    time_series_df[<span class="st">&quot;time_period&quot;</span>].iloc[<span class="op">-</span><span class="dv">1</span>], mean_value <span class="op">+</span> <span class="dv">1</span>,</span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f&quot;Mean: </span><span class="sc">{</span>mean_value<span class="sc">:.1f}</span><span class="ss">&quot;</span>,</span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>    ha<span class="op">=</span><span class="st">&quot;right&quot;</span>, va<span class="op">=</span><span class="st">&quot;bottom&quot;</span>, color<span class="op">=</span><span class="st">&quot;blue&quot;</span>, fontsize<span class="op">=</span><span class="dv">12</span></span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating time-series chart</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>time_series_df <span class="op">=</span> (</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    indicator_df.groupby(<span class="st">&quot;time_period&quot;</span>, as_index<span class="op">=</span><span class="va">False</span>)[<span class="st">&quot;obs_value&quot;</span>].mean()</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate min, max, and mean of average obs_value</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>min_row <span class="op">=</span> time_series_df.loc[time_series_df[<span class="st">&quot;obs_value&quot;</span>].idxmin()]</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>max_row <span class="op">=</span> time_series_df.loc[time_series_df[<span class="st">&quot;obs_value&quot;</span>].idxmax()]</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>mean_value <span class="op">=</span> time_series_df[<span class="st">&quot;obs_value&quot;</span>].mean()</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.lineplot(data<span class="op">=</span>time_series_df, x<span class="op">=</span><span class="st">&quot;time_period&quot;</span>, y<span class="op">=</span><span class="st">&quot;obs_value&quot;</span>, marker<span class="op">=</span><span class="st">&quot;o&quot;</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Average Polio Vaccination Over Time&quot;</span>, fontsize<span class="op">=</span><span class="dv">20</span>, pad<span class="op">=</span><span class="dv">30</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Year&quot;</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Vaccination Rate (%)&quot;</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">90</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co">#Adding annotations for min, max, and mean obs_value in the visualization</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>ax.text(</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    min_row[<span class="st">&quot;time_period&quot;</span>], min_row[<span class="st">&quot;obs_value&quot;</span>],</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f&quot;Min: </span><span class="sc">{</span>min_row[<span class="st">&#39;obs_value&#39;</span>]<span class="sc">:.1f}</span><span class="ss">&quot;</span>,</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    ha<span class="op">=</span><span class="st">&quot;center&quot;</span>, va<span class="op">=</span><span class="st">&quot;top&quot;</span>, color<span class="op">=</span><span class="st">&quot;red&quot;</span>, fontsize<span class="op">=</span><span class="dv">12</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>ax.text(</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    max_row[<span class="st">&quot;time_period&quot;</span>], max_row[<span class="st">&quot;obs_value&quot;</span>] <span class="op">+</span> <span class="dv">2</span>,</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f&quot;Max: </span><span class="sc">{</span>max_row[<span class="st">&#39;obs_value&#39;</span>]<span class="sc">:.1f}</span><span class="ss">&quot;</span>,</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    ha<span class="op">=</span><span class="st">&quot;center&quot;</span>, va<span class="op">=</span><span class="st">&quot;bottom&quot;</span>, color<span class="op">=</span><span class="st">&quot;green&quot;</span>, fontsize<span class="op">=</span><span class="dv">12</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>plt.axhline(mean_value, color<span class="op">=</span><span class="st">&quot;blue&quot;</span>, linestyle<span class="op">=</span><span class="st">&quot;--&quot;</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>ax.text(</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>    time_series_df[<span class="st">&quot;time_period&quot;</span>].iloc[<span class="op">-</span><span class="dv">1</span>], mean_value <span class="op">+</span> <span class="dv">1</span>,</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f&quot;Mean: </span><span class="sc">{</span>mean_value<span class="sc">:.1f}</span><span class="ss">&quot;</span>,</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>    ha<span class="op">=</span><span class="st">&quot;right&quot;</span>, va<span class="op">=</span><span class="st">&quot;bottom&quot;</span>, color<span class="op">=</span><span class="st">&quot;blue&quot;</span>, fontsize<span class="op">=</span><span class="dv">12</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -3456,35 +3393,35 @@ This line graph captures the notable journey of global determination against one
 </section>
 <section id="visualization-3-bar-graph" class="level1">
 <h1>Visualization #3: Bar Graph</h1>
-<div id="cell-18" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779962356,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:415,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="34a25123-fbcf-49e2-8040-c399ee2401c6" data-execution_count="12">
+<div id="cell-18" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745789747053,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:306,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="2ab9493a-1e90-4a8b-a671-25d3e55f6e7c" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating horizontal bar chart</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>regional_avg <span class="op">=</span> joined_df.groupby(<span class="st">&quot;region&quot;</span>, as_index<span class="op">=</span><span class="va">False</span>)[<span class="st">&quot;obs_value&quot;</span>].mean()</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>regional_avg <span class="op">=</span> regional_avg.sort_values(by<span class="op">=</span><span class="st">&quot;obs_value&quot;</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.barplot(</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>regional_avg,</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">&quot;region&quot;</span>,</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">&quot;obs_value&quot;</span>,</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">&quot;region&quot;</span>,</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    dodge<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    palette<span class="op">=</span><span class="st">&quot;pastel&quot;</span>,</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Regional Comparison of Polio Vaccination&quot;</span>)</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Vaccination Rate (%)&quot;</span>)</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Region&quot;</span>)</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> container <span class="kw">in</span> ax.containers:</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    ax.bar_label(container, fmt<span class="op">=</span><span class="st">&#39;</span><span class="sc">%.1f</span><span class="st">&#39;</span>, label_type<span class="op">=</span><span class="st">&#39;edge&#39;</span>, padding<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating horizontal bar chart</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>regional_avg <span class="op">=</span> joined_df.groupby(<span class="st">&quot;region&quot;</span>, as_index<span class="op">=</span><span class="va">False</span>)[<span class="st">&quot;obs_value&quot;</span>].mean()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>regional_avg <span class="op">=</span> regional_avg.sort_values(by<span class="op">=</span><span class="st">&quot;obs_value&quot;</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.barplot(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>regional_avg,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">&quot;region&quot;</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">&quot;obs_value&quot;</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">&quot;region&quot;</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    dodge<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    palette<span class="op">=</span><span class="st">&quot;pastel&quot;</span>,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Regional Comparison of Polio Vaccination&quot;</span>)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Vaccination Rate (%)&quot;</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Region&quot;</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> container <span class="kw">in</span> ax.containers:</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    ax.bar_label(container, fmt<span class="op">=</span><span class="st">&#39;</span><span class="sc">%.1f</span><span class="st">&#39;</span>, label_type<span class="op">=</span><span class="st">&#39;edge&#39;</span>, padding<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -3500,86 +3437,92 @@ The bar chart shows average polio vaccination coverage across different UNICEF r
 </section>
 <section id="visualization-4-table" class="level1">
 <h1>Visualization #4: Table</h1>
-<div id="cell-21" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779969007,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:40,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-execution_count="13">
+<div id="cell-21" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745789767894,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:61,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying top 10 countries per region based on average obs_value</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating average obs_value for each country</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>avg_obs_by_country <span class="op">=</span> joined_df.groupby(<span class="st">&#39;country&#39;</span>)[<span class="st">&#39;obs_value&#39;</span>].mean().reset_index()</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>avg_obs_by_country <span class="op">=</span> avg_obs_by_country.sort_values(<span class="st">&#39;obs_value&#39;</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>top_10_countries <span class="op">=</span> []</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Iterate through all countries one region at a time, create a list of top 10 countries based on average obs_value (highest values first)</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> region <span class="kw">in</span> joined_df[<span class="st">&#39;region&#39;</span>].unique():</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    region_df <span class="op">=</span> joined_df[joined_df[<span class="st">&#39;region&#39;</span>] <span class="op">==</span> region]</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    region_avg <span class="op">=</span> region_df.groupby(<span class="st">&#39;country&#39;</span>)[<span class="st">&#39;obs_value&#39;</span>].mean().reset_index()</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    region_avg_sorted <span class="op">=</span> region_avg.sort_values(by<span class="op">=</span><span class="st">&#39;obs_value&#39;</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    top_countries_in_region <span class="op">=</span> region_avg_sorted.head(<span class="dv">10</span>)[<span class="st">&#39;country&#39;</span>].tolist()</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    top_10_countries.extend(top_countries_in_region)</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>top_10_df <span class="op">=</span> joined_df[joined_df[<span class="st">&#39;country&#39;</span>].isin(top_10_countries)]</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>top_10_avg_df <span class="op">=</span> top_10_df.groupby([<span class="st">&#39;region&#39;</span>, <span class="st">&#39;country&#39;</span>]).agg({</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;obs_value&#39;</span>: <span class="st">&#39;mean&#39;</span>,</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;life_expectancy_at_birth_total_years&#39;</span>: <span class="st">&#39;mean&#39;</span>,</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;population_total&#39;</span>: <span class="st">&#39;mean&#39;</span></span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>}).reset_index()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying top 10 countries per region based on average obs_value</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>avg_obs_by_country <span class="op">=</span> joined_df.groupby(<span class="st">&#39;country&#39;</span>)[<span class="st">&#39;obs_value&#39;</span>].mean().reset_index()</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>avg_obs_by_country <span class="op">=</span> avg_obs_by_country.sort_values(<span class="st">&#39;obs_value&#39;</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to get top 10 countries per region</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_top_10_per_region(df, region_col<span class="op">=</span><span class="st">&#39;region&#39;</span>, country_col<span class="op">=</span><span class="st">&#39;country&#39;</span>, value_col<span class="op">=</span><span class="st">&#39;obs_value&#39;</span>):</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    top_10_countries <span class="op">=</span> []</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> region <span class="kw">in</span> df[region_col].unique():</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        region_df <span class="op">=</span> df[df[region_col] <span class="op">==</span> region]</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        region_avg <span class="op">=</span> region_df.groupby(country_col)[value_col].mean().reset_index()</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        region_avg_sorted <span class="op">=</span> region_avg.sort_values(by<span class="op">=</span>value_col, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        top_10_countries.extend(region_avg_sorted.head(<span class="dv">10</span>)[country_col].tolist())</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> top_10_countries</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the function created above to get top 10 countries per region</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>top_countries <span class="op">=</span> get_top_10_per_region(joined_df)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the joined_df to fetch top 10 country data</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>top_10_df <span class="op">=</span> joined_df[joined_df[<span class="st">&#39;country&#39;</span>].isin(top_countries)]</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the average of obs_value and life_expectancy to use in creating the scatterplot</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>top_10_avg_df <span class="op">=</span> top_10_df.groupby([<span class="st">&#39;region&#39;</span>, <span class="st">&#39;country&#39;</span>]).agg({</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;obs_value&#39;</span>: <span class="st">&#39;mean&#39;</span>,</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;life_expectancy_at_birth_total_years&#39;</span>: <span class="st">&#39;mean&#39;</span>,</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;population_total&#39;</span>: <span class="st">&#39;mean&#39;</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>}).reset_index()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cell-22" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779972869,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:2233,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="d9ed1b6f-b4c9-4f11-f7a0-88f65c9c2ace" data-execution_count="14">
+<div id="cell-22" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745789777368,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:1344,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="d07726d3-e5ca-4277-bac1-7b6e6aa02c02" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating Table to show top-10 countries per region</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>top_10_avg_df_sorted <span class="op">=</span> top_10_avg_df.copy()</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rounding the avg obs_value and population_total to 2 decimal places</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>top_10_avg_df_sorted[<span class="st">&#39;obs_value&#39;</span>] <span class="op">=</span> top_10_avg_df_sorted[<span class="st">&#39;obs_value&#39;</span>].<span class="bu">round</span>(<span class="dv">2</span>)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>top_10_avg_df_sorted[<span class="st">&#39;population_total&#39;</span>] <span class="op">=</span> top_10_avg_df_sorted[<span class="st">&#39;population_total&#39;</span>].<span class="bu">round</span>(<span class="dv">2</span>)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>top_10_avg_df_sorted <span class="op">=</span> top_10_avg_df_sorted.sort_values([<span class="st">&#39;region&#39;</span>, <span class="st">&#39;obs_value&#39;</span>])</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">&#39;off&#39;</span>)</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>table_data <span class="op">=</span> top_10_avg_df_sorted[[<span class="st">&#39;region&#39;</span>, <span class="st">&#39;country&#39;</span>, <span class="st">&#39;obs_value&#39;</span>,<span class="st">&#39;population_total&#39;</span>]]</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>column_titles <span class="op">=</span> [<span class="st">&quot;Region&quot;</span>, <span class="st">&quot;Country&quot;</span>, <span class="st">&quot;Average Vaccination Rate (%)&quot;</span>,<span class="st">&quot;Average Country Population&quot;</span>]</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the table</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> ax.table(</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    cellText<span class="op">=</span>table_data.values,</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    colLabels<span class="op">=</span>column_titles,</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    cellLoc<span class="op">=</span><span class="st">&#39;left&#39;</span>,</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    loc<span class="op">=</span><span class="st">&#39;center&#39;</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>table.auto_set_font_size(<span class="va">False</span>)</span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>table.set_fontsize(<span class="dv">10</span>)</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>table.auto_set_column_width(col<span class="op">=</span><span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(column_titles))))</span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>tab10_colors <span class="op">=</span> sns.color_palette(<span class="st">&quot;tab10&quot;</span>)</span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>unique_regions <span class="op">=</span> top_10_avg_df_sorted[<span class="st">&#39;region&#39;</span>].unique()</span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>region_colors <span class="op">=</span> {region: tab10_colors[i <span class="op">%</span> <span class="bu">len</span>(tab10_colors)] <span class="cf">for</span> i, region <span class="kw">in</span> <span class="bu">enumerate</span>(unique_regions)}</span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (row, col), cell <span class="kw">in</span> table.get_celld().items():</span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> row <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>        cell.set_text_props(weight<span class="op">=</span><span class="st">&#39;bold&#39;</span>, color<span class="op">=</span><span class="st">&#39;white&#39;</span>)</span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>        cell.set_facecolor(<span class="st">&#39;#4CAF50&#39;</span>)</span>
-<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>        region <span class="op">=</span> table_data.iloc[row<span class="op">-</span><span class="dv">1</span>][<span class="st">&#39;region&#39;</span>]</span>
-<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>        cell.set_facecolor(region_colors.get(region, <span class="st">&#39;#ffffff&#39;</span>))</span>
-<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>fig.text(</span>
-<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.5</span>, <span class="fl">1.35</span>,</span>
-<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Top 10 Performing Countries Per Region (by Avg Vaccination Rate)&quot;</span>,</span>
-<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>    ha<span class="op">=</span><span class="st">&#39;center&#39;</span>,</span>
-<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>    va<span class="op">=</span><span class="st">&#39;top&#39;</span>,</span>
-<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>    fontsize<span class="op">=</span><span class="dv">16</span>,</span>
-<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>    fontweight<span class="op">=</span><span class="st">&#39;bold&#39;</span></span>
-<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(top<span class="op">=</span><span class="fl">0.85</span>)</span>
-<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating Table to show top-10 countries per region</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>top_10_avg_df_sorted <span class="op">=</span> top_10_avg_df.copy()</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rounding the avg obs_value and population_total to 2 decimal places</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>top_10_avg_df_sorted[<span class="st">&#39;obs_value&#39;</span>] <span class="op">=</span> top_10_avg_df_sorted[<span class="st">&#39;obs_value&#39;</span>].<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>top_10_avg_df_sorted[<span class="st">&#39;population_total&#39;</span>] <span class="op">=</span> top_10_avg_df_sorted[<span class="st">&#39;population_total&#39;</span>].<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>top_10_avg_df_sorted <span class="op">=</span> top_10_avg_df_sorted.sort_values([<span class="st">&#39;region&#39;</span>, <span class="st">&#39;obs_value&#39;</span>])</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">&#39;off&#39;</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>table_data <span class="op">=</span> top_10_avg_df_sorted[[<span class="st">&#39;region&#39;</span>, <span class="st">&#39;country&#39;</span>, <span class="st">&#39;obs_value&#39;</span>,<span class="st">&#39;population_total&#39;</span>]]</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>column_titles <span class="op">=</span> [<span class="st">&quot;Region&quot;</span>, <span class="st">&quot;Country&quot;</span>, <span class="st">&quot;Average Vaccination Rate (%)&quot;</span>,<span class="st">&quot;Average Country Population&quot;</span>]</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the table</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> ax.table(</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    cellText<span class="op">=</span>table_data.values,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    colLabels<span class="op">=</span>column_titles,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    cellLoc<span class="op">=</span><span class="st">&#39;left&#39;</span>,</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    loc<span class="op">=</span><span class="st">&#39;center&#39;</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>table.auto_set_font_size(<span class="va">False</span>)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>table.set_fontsize(<span class="dv">10</span>)</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>table.auto_set_column_width(col<span class="op">=</span><span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(column_titles))))</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>tab10_colors <span class="op">=</span> sns.color_palette(<span class="st">&quot;tab10&quot;</span>)</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>unique_regions <span class="op">=</span> top_10_avg_df_sorted[<span class="st">&#39;region&#39;</span>].unique()</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>region_colors <span class="op">=</span> {region: tab10_colors[i <span class="op">%</span> <span class="bu">len</span>(tab10_colors)] <span class="cf">for</span> i, region <span class="kw">in</span> <span class="bu">enumerate</span>(unique_regions)}</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (row, col), cell <span class="kw">in</span> table.get_celld().items():</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> row <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>        cell.set_text_props(weight<span class="op">=</span><span class="st">&#39;bold&#39;</span>, color<span class="op">=</span><span class="st">&#39;white&#39;</span>)</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>        cell.set_facecolor(<span class="st">&#39;#4CAF50&#39;</span>)</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>        region <span class="op">=</span> table_data.iloc[row<span class="op">-</span><span class="dv">1</span>][<span class="st">&#39;region&#39;</span>]</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>        cell.set_facecolor(region_colors.get(region, <span class="st">&#39;#ffffff&#39;</span>))</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>fig.text(</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.5</span>, <span class="fl">1.35</span>,</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Top 10 Performing Countries Per Region (by Avg Vaccination Rate)&quot;</span>,</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>    ha<span class="op">=</span><span class="st">&#39;center&#39;</span>,</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    va<span class="op">=</span><span class="st">&#39;top&#39;</span>,</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>    fontsize<span class="op">=</span><span class="dv">16</span>,</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>    fontweight<span class="op">=</span><span class="st">&#39;bold&#39;</span></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(top<span class="op">=</span><span class="fl">0.85</span>)</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -3598,68 +3541,68 @@ This visualization helps us quickly spot which countries maintained higher immun
 </section>
 <section id="visualization-5-scatterplot" class="level1">
 <h1>Visualization #5: Scatterplot</h1>
-<div id="cell-25" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745779977686,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:1054,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="1f5d0221-8748-4af8-cd6c-8961381aee70" data-execution_count="15">
+<div id="cell-25" class="cell" data-executioninfo="{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1745789787516,&quot;user_tz&quot;:-60,&quot;elapsed&quot;:434,&quot;user&quot;:{&quot;displayName&quot;:&quot;Siddhi Rajesh Bhute&quot;,&quot;userId&quot;:&quot;01977518345933036142&quot;}}" data-outputid="8928b879-a0d9-4a63-c054-d3ef851ea6cf" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating Scatter plot</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate trend line</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>slope, intercept, r_value, p_value, std_err <span class="op">=</span> linregress(</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    top_10_avg_df[<span class="st">&quot;life_expectancy_at_birth_total_years&quot;</span>],</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    top_10_avg_df[<span class="st">&quot;obs_value&quot;</span>]</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>top_10_avg_df,</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">&quot;life_expectancy_at_birth_total_years&quot;</span>,</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">&quot;obs_value&quot;</span>,</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">&quot;region&quot;</span>,</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    palette<span class="op">=</span><span class="st">&quot;tab10&quot;</span>,</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    s<span class="op">=</span><span class="dv">100</span>,</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding trend line calculated earlier</span></span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>x_vals <span class="op">=</span> np.array(ax.get_xlim())</span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>y_vals <span class="op">=</span> intercept <span class="op">+</span> slope <span class="op">*</span> x_vals</span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>ax.plot(x_vals, y_vals, <span class="st">&#39;--&#39;</span>, color<span class="op">=</span><span class="st">&#39;black&#39;</span>, linewidth<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">&quot;Life Expectancy vs. Average Vaccination Rate by Top 10 Countries Per Region&quot;</span>, fontsize<span class="op">=</span><span class="dv">18</span>, pad<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">&quot;Life Expectancy (Years)&quot;</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">&quot;Average Vaccination Rate (%)&quot;</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>)</span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>legend <span class="op">=</span> ax.legend(title<span class="op">=</span><span class="st">&quot;Region&quot;</span>, bbox_to_anchor<span class="op">=</span>(<span class="fl">1.05</span>, <span class="dv">1</span>), loc<span class="op">=</span><span class="st">&#39;upper left&#39;</span>)</span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(right<span class="op">=</span><span class="fl">0.75</span>)</span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>top_countries <span class="op">=</span> pd.concat([</span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    top_10_avg_df.nlargest(<span class="dv">5</span>, <span class="st">&#39;obs_value&#39;</span>),</span>
-<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    top_10_avg_df.nsmallest(<span class="dv">5</span>, <span class="st">&#39;obs_value&#39;</span>)</span>
-<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, row <span class="kw">in</span> top_countries.iterrows():</span>
-<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>    ax.text(</span>
-<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>        row[<span class="st">&quot;life_expectancy_at_birth_total_years&quot;</span>] <span class="op">+</span> <span class="fl">0.5</span>,</span>
-<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>        row[<span class="st">&quot;obs_value&quot;</span>] <span class="op">+</span> <span class="fl">0.5</span>,</span>
-<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>        row[<span class="st">&quot;country&quot;</span>],</span>
-<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>        fontsize<span class="op">=</span><span class="dv">9</span>,</span>
-<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">&#39;black&#39;</span></span>
-<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> slope <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>    message <span class="op">=</span> <span class="st">&quot;Trend: Higher life expectancy is associated</span><span class="ch">\n</span><span class="st">with higher Vaccination rates.&quot;</span></span>
-<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>    message <span class="op">=</span> <span class="st">&quot;Trend: Higher life expectancy is associated</span><span class="ch">\n</span><span class="st">with lower Vaccination rates.&quot;</span></span>
-<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>fig.text(</span>
-<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.79</span>, <span class="fl">0.63</span>,</span>
-<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>    message,</span>
-<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>    ha<span class="op">=</span><span class="st">&#39;left&#39;</span>,</span>
-<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>    va<span class="op">=</span><span class="st">&#39;top&#39;</span>,</span>
-<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>    fontsize<span class="op">=</span><span class="dv">10</span>,</span>
-<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span><span class="bu">dict</span>(boxstyle<span class="op">=</span><span class="st">&quot;round,pad=0.5&quot;</span>, facecolor<span class="op">=</span><span class="st">&quot;white&quot;</span>, edgecolor<span class="op">=</span><span class="st">&quot;black&quot;</span>)</span>
-<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating Scatter plot</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate trend line</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>slope, intercept, r_value, p_value, std_err <span class="op">=</span> linregress(</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    top_10_avg_df[<span class="st">&quot;life_expectancy_at_birth_total_years&quot;</span>],</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    top_10_avg_df[<span class="st">&quot;obs_value&quot;</span>]</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>top_10_avg_df,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">&quot;life_expectancy_at_birth_total_years&quot;</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">&quot;obs_value&quot;</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">&quot;region&quot;</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    palette<span class="op">=</span><span class="st">&quot;tab10&quot;</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    s<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding trend line calculated earlier</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>x_vals <span class="op">=</span> np.array(ax.get_xlim())</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>y_vals <span class="op">=</span> intercept <span class="op">+</span> slope <span class="op">*</span> x_vals</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>ax.plot(x_vals, y_vals, <span class="st">&#39;--&#39;</span>, color<span class="op">=</span><span class="st">&#39;black&#39;</span>, linewidth<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">&quot;Life Expectancy vs. Average Vaccination Rate by Top 10 Countries Per Region&quot;</span>, fontsize<span class="op">=</span><span class="dv">18</span>, pad<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">&quot;Life Expectancy (Years)&quot;</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">&quot;Average Vaccination Rate (%)&quot;</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>)</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>legend <span class="op">=</span> ax.legend(title<span class="op">=</span><span class="st">&quot;Region&quot;</span>, bbox_to_anchor<span class="op">=</span>(<span class="fl">1.05</span>, <span class="dv">1</span>), loc<span class="op">=</span><span class="st">&#39;upper left&#39;</span>)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(right<span class="op">=</span><span class="fl">0.75</span>)</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>top_countries <span class="op">=</span> pd.concat([</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>    top_10_avg_df.nlargest(<span class="dv">5</span>, <span class="st">&#39;obs_value&#39;</span>),</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    top_10_avg_df.nsmallest(<span class="dv">5</span>, <span class="st">&#39;obs_value&#39;</span>)</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, row <span class="kw">in</span> top_countries.iterrows():</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    ax.text(</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>        row[<span class="st">&quot;life_expectancy_at_birth_total_years&quot;</span>] <span class="op">+</span> <span class="fl">0.5</span>,</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>        row[<span class="st">&quot;obs_value&quot;</span>] <span class="op">+</span> <span class="fl">0.5</span>,</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>        row[<span class="st">&quot;country&quot;</span>],</span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>        fontsize<span class="op">=</span><span class="dv">9</span>,</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">&#39;black&#39;</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> slope <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>    message <span class="op">=</span> <span class="st">&quot;Trend: Higher life expectancy is associated</span><span class="ch">\n</span><span class="st">with higher Vaccination rates.&quot;</span></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>    message <span class="op">=</span> <span class="st">&quot;Trend: Higher life expectancy is associated</span><span class="ch">\n</span><span class="st">with lower Vaccination rates.&quot;</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>fig.text(</span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.79</span>, <span class="fl">0.63</span>,</span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>    message,</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>    ha<span class="op">=</span><span class="st">&#39;left&#39;</span>,</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>    va<span class="op">=</span><span class="st">&#39;top&#39;</span>,</span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>    fontsize<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span><span class="bu">dict</span>(boxstyle<span class="op">=</span><span class="st">&quot;round,pad=0.5&quot;</span>, facecolor<span class="op">=</span><span class="st">&quot;white&quot;</span>, edgecolor<span class="op">=</span><span class="st">&quot;black&quot;</span>)</span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
